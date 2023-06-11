@@ -17,19 +17,22 @@ PostgreSQL database.
 
 Then you can use two options to migrate database for this application
 
-### Migrate using migrations
+### Migrate using EF migration tool
 ```bash
 dotnet ef database update
 ```
 
-### Migrate usgin SQL script
+### Migrate using SQL script
 For the manual migration using SQL script please use create_database.sql file
 
+```bash
+psql -U username -p 5432 -h hostname -d database_name -f create_database.sql
+```
 
 ### Run application
 ```bash
 dotnet run
 ```
 
-# Manuasl testing
+# Manual testing
 Please open http://hostname:hostport/swagger for testing

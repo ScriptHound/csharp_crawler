@@ -47,6 +47,7 @@ namespace MyUnitTests
             Assert.True(result[0]["mytag"] == "John");
             Assert.True(result[1]["mytag"] == "John");
         }
+
         [Fact]
         public void TestFilteringWithMultipleJsonObjectsAndFilters()
         {
@@ -60,6 +61,31 @@ namespace MyUnitTests
                 ""name"": ""John"",
                 ""age"": 31,
                 ""city"": ""New York""    
+                },
+                {
+                ""name"": ""John"",
+                ""age"": 31,
+                ""city"": ""New York""    
+                }
+            ]";
+            var result = JsonDocumentsLogic.FilterJson(myJson, filters);
+            Assert.True(result.Count == 2);
+            Assert.True(result[0]["mytag"] == "John");
+            Assert.True(result[1]["mytag"] == "John");
+        }
+
+        [Fact]
+        public void TestFilteringWithNonExistentFilters()
+        {
+            var filters = new Dictionary<string, string> {
+                {"mytag", "$..name"},
+                {"city", "$..city"}
+            };
+            var myJson = @"
+            [
+                {
+                ""name"": ""John"",
+                ""age"": 31
                 },
                 {
                 ""name"": ""John"",

@@ -45,8 +45,8 @@ namespace JSON_PG.Controllers
             {
                 WriteIndented = true // Optional: Make the JSON output indented for readability
             });
-            var jsonEntiy = new JsonModel { BsonData = filteredJson };
-            _context.JsonModels.Add(jsonEntiy);
+            var jsonEntity = new JsonModel { BsonData = filteredJson };
+            _context.JsonModels.Add(jsonEntity);
             await _context.SaveChangesAsync();
             return Ok(jsonResponse);
         }

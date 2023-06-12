@@ -7,10 +7,24 @@ using Json.Path;
 namespace JSON_PG.Controllers;
 class JsonDocumentsLogic
 {
+
+    private static int GetTheLongestColumnInDataFrameLike(Dictionary<string, List<string>> data)
+    {
+        var longestColumn = 0;
+        foreach (KeyValuePair<string, List<string>> pair in data)
+        {
+            var columnLength = pair.Value.Count;
+            if (columnLength > longestColumn)
+            {
+                longestColumn = columnLength;
+            }
+        }
+        return longestColumn;
+    }
     public static List<Dictionary<string, string>> FilterJson(string json, Dictionary<string, string> filters)
     {
         var instance = JsonNode.Parse(json);
-        var jsonData = new List<Dictionary<string, string>> { };
+        var resultingDataToJsonSerialization = new List<Dictionary<string, string>> { };
         var foundData = new Dictionary<string, List<string>> { };
 
         // creates pandas Dataframe-like structure with keys as tags
@@ -26,15 +40,11 @@ class JsonDocumentsLogic
             foreach (var resultMember in result)
             {
                 var resultString = resultMember.Value.ToString();
-                if (resultString == null)
-                {
-                    resultString = "null";
-                }
                 resultsList.Add(resultString);
             }
         }
 
-        var foundDataValueLength = foundData.Values.First().Count;
+        var foundDataValueLength = GetTheLongestColumnInDataFrameLike(foundData);
 
         // converts pandas Dataframe-like structure to List of Dictionaries
         // for easier serialization to JSON
@@ -44,11 +54,18 @@ class JsonDocumentsLogic
             foreach (KeyValuePair<string, List<string>> pair in foundData)
             {
                 var tag = pair.Key;
-                var result = pair.Value[i];
-                data.Add(tag, result);
+                if (i >= pair.Value.Count)
+                {
+                    data.Add(tag, "");
+                }
+                else
+                {
+                    var result = pair.Value[i];
+                    data.Add(tag, result);
+                }
             }
-            jsonData.Add(data);
+            resultingDataToJsonSerialization.Add(data);
         }
-        return jsonData;
+        return resultingDataToJsonSerialization;
     }
 }

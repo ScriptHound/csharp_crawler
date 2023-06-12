@@ -68,15 +68,6 @@ namespace MyUnitTests
                 }
             ]";
             var result = JsonDocumentsLogic.FilterJson(myJson, filters);
-            // foreach (var item in result)
-            // {
-            //     var keys = item.Keys;
-            //     foreach (var key in keys)
-            //     {
-            //         var value = item[key];
-            //         Console.WriteLine($"Key: {key} Value: {value}");
-            //     }
-            // }
             Assert.True(result.Count == 2);
             Assert.True(result[0]["mytag"] == "John");
             Assert.True(result[1]["mytag"] == "John");

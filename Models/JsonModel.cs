@@ -26,6 +26,7 @@ public class ApplicationDbContext : DbContext
 public class UrlModel
 {
     public string Url { get; set; }
+    public Dictionary<string, string> JsonDataToSavePointers { get; set; }
 }
 
 public class JsonModel

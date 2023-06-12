@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
+using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +38,14 @@ namespace JSON_PG.Controllers
             var jsonResponse = await client.GetStringAsync(targetUrl);
             Console.WriteLine(jsonResponse);
 
-            var jsonEntiy = new JsonModel { BsonData = jsonResponse };
+            var filters = url.JsonDataToSavePointers;
+            var filteredData = JsonDocumentsLogic.FilterJson(jsonResponse, filters);
+
+            string filteredJson = JsonSerializer.Serialize(filteredData, new JsonSerializerOptions
+            {
+                WriteIndented = true // Optional: Make the JSON output indented for readability
+            });
+            var jsonEntiy = new JsonModel { BsonData = filteredJson };
             _context.JsonModels.Add(jsonEntiy);
             await _context.SaveChangesAsync();
             return Ok(jsonResponse);

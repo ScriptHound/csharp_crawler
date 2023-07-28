@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:12
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  backend:
+    build: .
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 7177:7177
+      - 5141:5141
+
+volumes:
+  postgres-data:
